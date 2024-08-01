@@ -7,9 +7,9 @@ terraform {
     }
     
   }
-  backend "remote" {
-    hostname = "app.terraform.io"    
+  cloud {
     organization = "A-Hannora-Systems"
+
     workspaces {
       name = "k8s-jenkins-kh-project"
     }

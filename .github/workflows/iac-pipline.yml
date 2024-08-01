@@ -41,12 +41,11 @@ jobs:
       #   run: |
       #     pwd
       #     docker run --rm -v $(pwd):/workspace -w /workspace accurics/terrascan scan -t aws -d .
-      #   continue-on-error: true
+        #   continue-on-error: true
         
       - name: Terraform Plan
         id: plan
         run: terraform plan -out=tfplan
-        continue-on-error: true
 
       # - name: Terraform Plan Status
       #   if: steps.plan.outcome == 'failure'
