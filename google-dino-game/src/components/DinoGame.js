@@ -5,7 +5,7 @@ const DinoGame = () => {
   console.log("Rendering DinoGame Component");
   return (
     <div>
-      <h1>Google Dino Game</h1>
+      <h1>Hannora Dino Game</h1>
       <ChromeDinoGame />
     </div>
   );
