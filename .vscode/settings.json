@@ -1,5 +1,10 @@
 {
-    "github-actions.workflows.pinned.workflows": [
-        ".github/workflows/iac-pipline.yml"
-    ]
-}
+    "yaml.schemas": {
+      "kubernetes": "/*.k8s.yaml",
+      "http://json.schemastore.org/github-workflow": "/.github/workflows/*",
+      "ansible": "/*.yml",
+      "no-schema": ["/ansible/playbook.yml"]
+    },
+    "yaml.validate": false
+  }
+  

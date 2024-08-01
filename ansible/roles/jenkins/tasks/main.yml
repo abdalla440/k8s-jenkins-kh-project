@@ -1,0 +1,20 @@
+- name: Create Jenkins namespace
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: "{{ jenkins_namespace }}"
+
+- name: Deploy Jenkins
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'roles/jenkins/templates/jenkins-deployment.yml.j2') }}"
+    namespace: "{{ jenkins_namespace }}"
+
+- name: Create Jenkins service
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'roles/jenkins/templates/jenkins-service.yml.j2') }}"
+    namespace: "{{ jenkins_namespace }}"

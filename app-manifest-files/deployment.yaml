@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hno-dino-app-deployment
+  namespace: dino-namespace
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hno-dino-app
+  template:
+    metadata:
+      labels:
+        app: hno-dino-app
+    spec:
+      containers:
+      - name: hno-dino-app
+        image: ahannora440/google-dino:latest
+        ports:
+        - containerPort: 80
