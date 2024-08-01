@@ -39,13 +39,13 @@ jobs:
         run: |
           docker run --rm -v $(pwd):/workspace -w /workspace accurics/terrascan scan -t aws -d .
         continue-on-error: true
-        
+
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color
+        run: terraform plan -no-color -var-file=variables.tfvars
 
+      # Uncomment to apply changes automatically (ensure this is desired and safe in your environment)
       # - name: Terraform Apply
       #   id: apply
       #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      #   run: terraform apply -auto-approve
-
+      #   run: terraform apply -auto-approve -var-file=variables.tfvars
