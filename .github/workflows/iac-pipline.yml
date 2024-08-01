@@ -4,9 +4,7 @@ on:
   push:
     branches: 
       - main
-    # paths: 
-    #   - terraform/**
-  
+
 jobs:
   terraform:
     name: "Terraform"
@@ -39,21 +37,15 @@ jobs:
 
       # - name: Run Terrascan
       #   run: |
-      #     pwd
       #     docker run --rm -v $(pwd):/workspace -w /workspace accurics/terrascan scan -t aws -d .
       #   continue-on-error: true
         
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color 
-        continue-on-error: true
-        
-
-      # - name: Terraform Plan Status
-      #   if: steps.plan.outcome == 'failure'
-      #   run: exit 1
+        run: terraform plan -no-color
 
       - name: Terraform Apply
         id: apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve 
+        run: terraform apply -auto-approve
+
