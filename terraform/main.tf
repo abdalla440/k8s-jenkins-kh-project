@@ -8,6 +8,7 @@ resource "aws_vpc" "main" {
   }
 }
 
+
 resource "aws_subnet" "public" {
   count = length(var.public_subnet_cidrs)
 
