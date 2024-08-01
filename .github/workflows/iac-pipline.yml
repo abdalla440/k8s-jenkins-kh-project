@@ -31,21 +31,21 @@ jobs:
         id: init
         run: terraform init
 
-      # - name: Terraform Validate
-      #   id: validate
-      #   run: terraform validate
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate
 
-      # - name: Run Terrascan
-      #   run: |
-      #     docker run --rm -v $(pwd):/workspace -w /workspace accurics/terrascan scan -t aws -d .
-      #   continue-on-error: true
+      - name: Run Terrascan
+        run: |
+          docker run --rm -v $(pwd):/workspace -w /workspace accurics/terrascan scan -t aws -d .
+        continue-on-error: true
         
       - name: Terraform Plan
         id: plan
         run: terraform plan -no-color
 
-      - name: Terraform Apply
-        id: apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve
+      # - name: Terraform Apply
+      #   id: apply
+      #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      #   run: terraform apply -auto-approve
 

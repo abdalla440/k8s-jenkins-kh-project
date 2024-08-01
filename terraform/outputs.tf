@@ -1,11 +1,19 @@
 output "vpc_id" {
-  value = aws_vpc.main.id
+  value = aws_vpc.dino-vpc.id
 }
 
-output "public_subnets" {
-  value = aws_subnet.public[*].id
+output "subnet_ids" {
+  value = aws_subnet.subnet[*].id
 }
 
-output "internet_gateway_id" {
-  value = aws_internet_gateway.main.id
+output "cluster_name" {
+  value = aws_eks_cluster.k8s.name
+}
+
+output "cluster_endpoint" {
+  value = aws_eks_cluster.k8s.endpoint
+}
+
+output "cluster_role_arn" {
+  value = aws_iam_role.eks_role.arn
 }
