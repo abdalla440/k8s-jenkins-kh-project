@@ -51,7 +51,24 @@ jobs:
         id: apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve 
+    
+  ansible:
+      name: "Ansible"
+      runs-on: ubuntu-latest
+      needs: terraform
+      defaults:
+        run:
+          shell: bash
+          working-directory: ./ansible
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
 
+        - name: Install Ansible
+          run: sudo apt-get update && sudo apt-get install -y ansible
+
+        - name: Create Jenkins Namespace
+          run: ansible-playbook create_namespace.yml
       # - name: Install AWS CLI and kubectl
       #   run: |
       #     sudo apt-get update

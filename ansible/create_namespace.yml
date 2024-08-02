@@ -1,13 +1,10 @@
 ---
-- name: Create Jenkins namespace
+- name: Create Jenkins Namespace
   hosts: localhost
   tasks:
-    - name: Create jenkins namespace
-      community.kubernetes.k8s:
+    - name: Create Kubernetes Namespace
+      k8s:
         api_version: v1
         kind: Namespace
         name: jenkins
-      register: result
-
-    - debug:
-        var: result
+        state: present
