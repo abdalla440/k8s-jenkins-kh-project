@@ -5,4 +5,5 @@ resource "aws_eks_cluster" "k8s" {
   vpc_config {
     subnet_ids = aws_subnet.subnet[*].id
   }
+  
 }
