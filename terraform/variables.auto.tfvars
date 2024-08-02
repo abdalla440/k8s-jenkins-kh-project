@@ -8,3 +8,4 @@ max_size         = 3
 min_size         = 1
 instance_type    = "t3.micro"
 ec2_key_pair_name = "dino-key-pair"
+
