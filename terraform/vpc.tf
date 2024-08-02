@@ -2,7 +2,9 @@ resource "aws_vpc" "dino-vpc" {
   cidr_block = var.cidr_block
   # enable_dns_support = true
   # enable_dns_hostnames = true
-
+ tags = {
+    Name = "dino-vpc"
+  }
 }
 
 # ---------------- subnets ----------------
@@ -17,8 +19,11 @@ resource "aws_subnet" "subnet" {
   cidr_block              = cidrsubnet(aws_vpc.dino-vpc.cidr_block, 8, count.index)
   availability_zone       = element(data.aws_availability_zones.available.names, count.index)
   # map_public_ip_on_launch = true
-
+  tags = {
+    Name = "dino-subnet-${count.index}"
+  }
 }
+
 
 # note: data.aws_availability_zones.available.names is a list of all availability zones in the region 
 # helps in distributing resources across multiple availability zones for high availability
@@ -26,7 +31,9 @@ data "aws_availability_zones" "available" {}
 
 resource "aws_internet_gateway" "dino-gw" {
   vpc_id = aws_vpc.dino-vpc.id
- 
+  tags = {
+    Name = "dino-gw"
+  }
 }
 
 resource "aws_route_table" "public" {
@@ -35,7 +42,9 @@ resource "aws_route_table" "public" {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.dino-gw.id
   }
- 
+ tags = {
+    Name = "dino-public-route-table"
+  }
 }
 
 resource "aws_route_table_association" "public" {
