@@ -5,5 +5,11 @@ resource "aws_eks_cluster" "k8s" {
   vpc_config {
     subnet_ids = aws_subnet.subnet[*].id
   }
-  
+
+  depends_on = [aws_iam_role_policy_attachment.eks_policy_attachment]
+
+  tags = {
+    Name = "${var.cluster_name}"
+
+  }
 }
