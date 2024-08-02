@@ -53,22 +53,25 @@ jobs:
         run: terraform apply -auto-approve 
     
   ansible:
-      name: "Ansible"
-      runs-on: ubuntu-latest
-      needs: terraform
-      defaults:
-        run:
-          shell: bash
-          working-directory: ./ansible
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
+    name: "Ansible"
+    runs-on: ubuntu-latest
+    needs: terraform
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./ansible
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-        - name: Install Ansible
-          run: sudo apt-get update && sudo apt-get install -y ansible
+      - name: Install Ansible and Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ansible python3-pip
+          pip3 install openshift kubernetes
 
-        - name: Create Jenkins Namespace
-          run: ansible-playbook create_namespace.yml
+      - name: Create Jenkins Namespace
+        run: ansible-playbook create_namespace.yml
       # - name: Install AWS CLI and kubectl
       #   run: |
       #     sudo apt-get update
