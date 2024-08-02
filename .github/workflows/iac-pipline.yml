@@ -8,86 +8,109 @@ on:
       # - terraform/**
 
 jobs:
-  # terraform:
-  #   name: "Terraform"
-  #   runs-on: ubuntu-latest
-  #   defaults:
-  #     run:
-  #       shell: bash
-  #       working-directory: ./terraform
-  #   env:
-  #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #     TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
-  #     AWS_REGION: "your-aws-region" # Replace with your AWS region
-
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
-
-  #     - name: Setup Terraform
-  #       uses: hashicorp/setup-terraform@v3
-  #       with:
-  #         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-
-  #     - name: Terraform Init
-  #       id: init
-  #       run: terraform init
-
-  #     - name: Terraform Validate
-  #       id: validate
-  #       run: terraform validate
-
-  #     - name: Run Terrascan
-  #       run: |
-  #         docker run --rm -v $(pwd):/workspace -w /workspace accurics/terrascan scan -t aws -d .
-  #       continue-on-error: true
-
-  #     - name: Terraform Plan
-  #       id: plan
-  #       run: terraform plan -no-color 
-
-  #     - name: Terraform Apply
-  #       id: apply
-  #       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-  #       run: terraform apply -auto-approve 
-    
-  ansible:
-    name: "Ansible"
+  terraform:
+    name: "Terraform"
     runs-on: ubuntu-latest
-    # needs: terraform
     defaults:
       run:
         shell: bash
-        working-directory: ./ansible
+        working-directory: ./terraform
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+      AWS_REGION: "your-aws-region" # Replace with your AWS region
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Ansible and Dependencies
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate
+
+      - name: Run Terrascan
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ansible python3-pip
-          pip3 install openshift kubernetes
+          docker run --rm -v $(pwd):/workspace -w /workspace accurics/terrascan scan -t aws -d .
+        continue-on-error: true
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color 
+
+      - name: Terraform Apply
+        id: apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve 
 
       - name: Create Jenkins Namespace
-        run: ansible-playbook create_namespace.yml --extra-vars "ansible_python_interpreter=/usr/bin/python3"      # - name: Install AWS CLI and kubectl
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install -y awscli
-      #     curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
-      #     chmod +x ./kubectl
-      #     sudo mv ./kubectl /usr/local/bin/kubectl
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+          curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x ./kubectl
+          sudo mv ./kubectl /usr/local/bin/kubectl
 
-      # - name: Configure kubectl
-      #   run: |
-      #     aws eks update-kubeconfig --name dino-cluster --region $AWS_REGION
+      - name: Configure kubectl
+        run: |
+          aws eks update-kubeconfig --name dino-cluster --region $AWS_REGION
           
-      # - name: Install Ansible
-      #   run: |
-      #     pip install ansible
-      #     ansible-galaxy collection install community.kubernetes
+      - name: Install Ansible
+        run: |
+          pip install ansible
+          ansible-galaxy collection install community.kubernetes
 
-      # - name: Create Jenkins namespace with Ansible
-      #   run: |
-      #     ansible-playbook ../ansible/create_namespace.yml
+      - name: Create Jenkins namespace with Ansible
+        run: |
+          ansible-playbook ../ansible/create_namespace.yml
+
+  # ansible:
+  #   name: "Ansible"
+  #   runs-on: ubuntu-latest
+  #   # needs: terraform
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #       working-directory: ./ansible
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+
+  #     - name: Install Ansible and Dependencies
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get install -y ansible python3-pip
+  #         pip3 install openshift kubernetes
+
+  #     - name: Create Jenkins Namespace
+  #       run: ansible-playbook create_namespace.yml --extra-vars "ansible_python_interpreter=/usr/bin/python3"      # - name: Install AWS CLI and kubectl
+      
+  #     # - name: Create Jenkins Namespace
+  #     #   run: |
+  #     #     sudo apt-get update
+  #     #     sudo apt-get install -y awscli
+  #     #     curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+  #     #     chmod +x ./kubectl
+  #     #     sudo mv ./kubectl /usr/local/bin/kubectl
+
+  #     # - name: Configure kubectl
+  #     #   run: |
+  #     #     aws eks update-kubeconfig --name dino-cluster --region $AWS_REGION
+          
+  #     # - name: Install Ansible
+  #     #   run: |
+  #     #     pip install ansible
+  #     #     ansible-galaxy collection install community.kubernetes
+
+  #     # - name: Create Jenkins namespace with Ansible
+  #     #   run: |
+  #     #     ansible-playbook ../ansible/create_namespace.yml
