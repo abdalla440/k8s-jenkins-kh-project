@@ -4,6 +4,8 @@ on:
   push:
     branches: 
       - main
+    paths: 
+      - terraform/**
 
 jobs:
   terraform:
@@ -17,6 +19,7 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+      AWS_REGION: "your-aws-region" # Replace with your AWS region
 
     steps:
       - name: Checkout code
@@ -42,13 +45,30 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color
+        run: terraform plan -no-color -var-file=variables.tfvars
 
-      # Uncomment to apply changes automatically (ensure this is desired and safe in your environment)
-      # - name: Terraform Apply
-      #   id: apply
-      #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      #   run: terraform apply -auto-approve
+      - name: Terraform Apply
+        id: apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve -var-file=variables.tfvars
 
+      - name: Install AWS CLI and kubectl
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+          curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x ./kubectl
+          sudo mv ./kubectl /usr/local/bin/kubectl
 
-      
+      - name: Configure kubectl
+        run: |
+          aws eks update-kubeconfig --name dino-cluster --region $AWS_REGION
+          
+      - name: Install Ansible
+        run: |
+          pip install ansible
+          ansible-galaxy collection install community.kubernetes
+
+      - name: Create Jenkins namespace with Ansible
+        run: |
+          ansible-playbook ../ansible/create_namespace.yml
