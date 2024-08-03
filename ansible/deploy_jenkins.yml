@@ -5,24 +5,24 @@
     - name: Apply Namespace
       kubernetes.core.k8s:
         state: present
-        definition: "{{ lookup('file', 'ansible/namespace.yaml') }}"
+        definition: "{{ lookup('file', 'namespace.yaml') }}"
 
     - name: Apply Service Account and Cluster Role Binding
       kubernetes.core.k8s:
         state: present
-        definition: "{{ lookup('file', 'ansible/service_account_and_cluster_role_binding.yaml') }}"
+        definition: "{{ lookup('file', 'service_account_and_cluster_role_binding.yaml') }}"
 
     - name: Apply Persistent Volume Claim
       kubernetes.core.k8s:
         state: present
-        definition: "{{ lookup('file', 'ansible/persistent_volume_claim.yaml') }}"
+        definition: "{{ lookup('file', 'persistent_volume_claim.yaml') }}"
 
     - name: Apply Jenkins Deployment
       kubernetes.core.k8s:
         state: present
-        definition: "{{ lookup('file', 'ansible/jenkins_deployment.yaml') }}"
+        definition: "{{ lookup('file', 'jenkins_deployment.yaml') }}"
 
     - name: Apply Jenkins Service
       kubernetes.core.k8s:
         state: present
-        definition: "{{ lookup('file', 'ansible/jenkins_service.yaml') }}"
+        definition: "{{ lookup('file', 'jenkins_service.yaml') }}"
