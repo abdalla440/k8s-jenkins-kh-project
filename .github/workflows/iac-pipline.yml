@@ -94,9 +94,9 @@ jobs:
           pip install jsonpatch kubernetes PyYAML
           ansible-galaxy collection install community.kubernetes
 
-      - name: Create Jenkins namespace with Ansible
-        run: |
-          ansible-playbook create_namespace.yml
+      # - name: Create Jenkins namespace with Ansible
+      #   run: |
+      #     ansible-playbook create_namespace.yml
       
       - name: Deploy Jenkins with Ansible
         run: |

@@ -1,3 +1,0 @@
-jenkins_namespace: jenkins
-jenkins_image: "jenkins/jenkins:lts"
-jenkins_service_type: "LoadBalancer"  # Options: ClusterIP, NodePort, LoadBalancer

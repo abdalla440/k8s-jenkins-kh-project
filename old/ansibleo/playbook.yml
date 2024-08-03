@@ -1,7 +1,0 @@
-- name: Deploy Jenkins on Kubernetes
-  hosts: localhost
-  become: yes
-  vars_files:
-    - roles/jenkins/vars/main.yml
-  roles:
-    - jenkins
