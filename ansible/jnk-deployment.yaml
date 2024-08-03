@@ -23,13 +23,13 @@ spec:
           volumeMounts:
             - name: jenkins-data
               mountPath: /var/jenkins_home
-          resources:
-            requests:
-              cpu: "500m" # Minimum CPU request (500 millicores)
-              memory: "512Mi" # Minimum memory request (512 Megabytes)
-            limits:
-              cpu: "1" # Maximum CPU limit (1 core)
-              memory: "1Gi" # Maximum memory limit (1 Gigabyte)
+          # resources:
+          #   requests:
+          #     cpu: "500m" # Minimum CPU request (500 millicores)
+          #     memory: "512Mi" # Minimum memory request (512 Megabytes)
+          #   limits:
+          #     cpu: "1" # Maximum CPU limit (1 core)
+          #     memory: "1Gi" # Maximum memory limit (1 Gigabyte)
       volumes:
         - name: jenkins-data
           persistentVolumeClaim:
