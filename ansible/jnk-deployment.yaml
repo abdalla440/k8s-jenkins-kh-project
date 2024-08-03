@@ -16,23 +16,29 @@ spec:
     spec:
       serviceAccountName: jenkins-sa
       containers:
-      - name: jenkins
-        image: jenkins/jenkins:lts
-        ports:
-        - containerPort: 8080
-        volumeMounts:
-        - name: jenkins-data
-          mountPath: /var/jenkins_home
-        resources:  
-          requests:
-            cpu: "500m"  # Minimum CPU request (500 millicores)
-            memory: "512Mi" # Minimum memory request (512 Megabytes)
-          limits:
-            cpu: "1" # Maximum CPU limit (1 core)
-            memory: "1Gi" # Maximum memory limit (1 Gigabyte)
+        - name: jenkins
+          image: jenkins/jenkins:lts
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: jenkins-data
+              mountPath: /var/jenkins_home
+          resources:
+            requests:
+              cpu: "500m" # Minimum CPU request (500 millicores)
+              memory: "512Mi" # Minimum memory request (512 Megabytes)
+            limits:
+              cpu: "1" # Maximum CPU limit (1 core)
+              memory: "1Gi" # Maximum memory limit (1 Gigabyte)
       volumes:
-      - name: jenkins-data
-        persistentVolumeClaim:
-          claimName: jenkins-pvc
-  strategy:
-    type: RollingUpdate 
+        - name: jenkins-data
+          persistentVolumeClaim:
+            claimName: jenkins-pvc
+      # Add wait-for-condition
+      strategy:
+        type: Recreate
+        # Wait for the PVC to be ready
+        # This will delay the pod creation until the PVC is bound
+        wait-for-condition:
+          type: Ready
+          status: "True"
