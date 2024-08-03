@@ -12,7 +12,7 @@ resource "aws_eks_node_group" "node_group" {
 
   instance_types = [var.instance_type]
 
-  capacity_type = "SPOT"
+  capacity_type  = "ON_DEMAND"
 
   remote_access {
     ec2_ssh_key = var.ec2_key_pair_name

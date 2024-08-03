@@ -1,0 +1,38 @@
+---
+- name: Deploy Jenkins on Kubernetes
+  hosts: localhost
+  tasks:
+    - name: Apply Namespace
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'jnk_namespace.yaml') }}"
+
+    - name: Apply Service Account
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'jnk_service_account.yaml') }}"
+
+    - name: Apply Cluster Role
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'jnk_cluster_rule.yaml') }}"
+
+    - name: Apply Cluster Role Binding
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'jnk_rule_binding.yaml') }}"
+
+    - name: Apply Persistent Volume Claim
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'jnk-pvc.yaml') }}"
+
+    - name: Apply Jenkins Deployment
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'jnk-deployment.yaml') }}"
+
+    - name: Apply Jenkins Service
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'jnk-service.yaml') }}"
