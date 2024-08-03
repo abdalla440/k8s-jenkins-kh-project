@@ -14,12 +14,16 @@ spec:
       labels:
         app: jenkins
     spec:
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
       serviceAccountName: jenkins-sa
       containers:
         - name: jenkins
           image: jenkins/jenkins:lts
           ports:
             - containerPort: 8080
+
           volumeMounts:
             - name: jenkins-data
               mountPath: /var/jenkins_home
@@ -33,7 +37,7 @@ spec:
       volumes:
         - name: jenkins-data
           persistentVolumeClaim:
-            claimName: jenkins-pvc
+            claimName: jenkins-pvc-claim
       # Add wait-for-condition
       strategy:
         type: Recreate
