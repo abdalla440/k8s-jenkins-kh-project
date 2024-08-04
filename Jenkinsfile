@@ -71,38 +71,53 @@
 
 /* groovylint-disable-next-line CompileStatic */
 pipeline {
-  environment {
-    registry = 'ahannora440/google-dino'
-    registryCredential = 'credentials-dockerhub'
-    dockerImage = ''
-  }
-  agent any
-  stages {
-    stage('Cloning our Git') {
-      steps {
-        git 'https://github.com/abdalla440/k8s-jenkins-kh-project.git'
-      }
-    }
-    stage('Building our image') {
-      steps {
-        script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+// 
+agent any
+    stages {
+        stage("Clone Git Repository") {
+            steps {
+                git(
+                    url: 'https://github.com/abdalla440/k8s-jenkins-kh-project.git',
+                    branch: "main",
+                    changelog: true,
+                    poll: true
+                )
+            }
         }
-      }
     }
-    stage('Deploy our image') {
-      steps {
-        script {
-          docker.withRegistry('', registryCredential) {
-            dockerImage.push()
-          }
-        }
-      }
-    }
-    stage('Cleaning up') {
-      steps {
-        sh "docker rmi $registry:$BUILD_NUMBER"
-      }
-    }
-  }
+  // environment {
+  //   registry = 'ahannora440/google-dino'
+  //   registryCredential = 'credentials-dockerhub'
+  //   dockerImage = ''
+  // }
+
+  // agent any
+  // stages {
+  //   stage('Cloning from GitHub') {
+  //     steps {
+  //       git 'https://github.com/abdalla440/k8s-jenkins-kh-project.git'
+  //     }
+  //   }
+  //   stage('Building image') {
+  //     steps {
+  //       script {
+  //         dockerImage = docker.build registry + ":$BUILD_NUMBER"
+  //       }
+  //     }
+  //   }
+  //   stage('Deploy image') {
+  //     steps {
+  //       script {
+  //         docker.withRegistry('', registryCredential) {
+  //           dockerImage.push()
+  //         }
+  //       }
+  //     }
+  //   }
+  //   stage('Cleaning up') {
+  //     steps {
+  //       sh "docker rmi $registry:$BUILD_NUMBER"
+  //     }
+  //   }
+  // }
 }
