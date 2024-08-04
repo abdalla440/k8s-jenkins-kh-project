@@ -15,7 +15,7 @@ spec:
         app: jenkins
     spec:
 
-      serviceAccountName: jenkins-sa
+      serviceAccountName: kubectl describe pvc jenkins-pvc-claim -n jenkins
       containers:
         - name: jenkins
           image: jenkins/jenkins:lts-jdk17
@@ -25,6 +25,10 @@ spec:
           volumeMounts:
             - name: jenkins-data
               mountPath: /var/jenkins_home
+          securityContext:
+            privileged: true
+            RunAsUser: 1000 
+            RunAsGroup: 1000
           # resources:
           #   requests:
           #     cpu: "500m" # Minimum CPU request (500 millicores)
