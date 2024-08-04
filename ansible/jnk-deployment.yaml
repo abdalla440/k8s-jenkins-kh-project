@@ -15,7 +15,7 @@ spec:
         app: jenkins
     spec:
 
-      serviceAccountName: kubectl describe pvc jenkins-pvc-claim -n jenkins
+      serviceAccountName: jenkins-sa
       containers:
         - name: jenkins
           image: jenkins/jenkins:lts-jdk17
