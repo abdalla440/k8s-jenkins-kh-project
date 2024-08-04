@@ -1,20 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hno-dino-app-deployment
-  namespace: dino-namespace
+  name: dino-app
+  namespace: dino-app 
+  labels:
+    app: dino-app
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: hno-dino-app
+      app: dino-app
   template:
     metadata:
       labels:
-        app: hno-dino-app
+        app: dino-app
     spec:
       containers:
-      - name: hno-dino-app
+      - name: dino-app-container
         image: ahannora440/google-dino:latest
         ports:
         - containerPort: 80
+        # resources:
+        #   requests:
+        #     cpu: "50m" 
+        #     memory: "128Mi" 
+        #   limits:
+        #     cpu: "100m"
+        #     memory: "256Mi" 

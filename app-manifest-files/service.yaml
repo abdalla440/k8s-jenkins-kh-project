@@ -1,13 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: hno-dino-app-service
-  namespace: dino-namespace
+  name: dino-app-service
+  namespace: dino-app 
 spec:
+  type: LoadBalancer 
   selector:
-    app: hno-dino-app
+    app: dino-app
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-  type: LoadBalancer
+  - port: 80
+    targetPort: 80
