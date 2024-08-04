@@ -14,38 +14,37 @@ spec:
       labels:
         app: jenkins
     spec:
-
+      securityContext:
+            fsGroup: 1000
+            runAsUser: 1000
       serviceAccountName: jenkins-sa
       containers:
         - name: jenkins
           image: jenkins/jenkins:lts-jdk17
           ports:
             - containerPort: 8080
+            - containerPort: 50000
 
           volumeMounts:
             - name: jenkins-data
               mountPath: /var/jenkins_home
-          securityContext:
-            privileged: true
-            RunAsUser: 1000 
-            RunAsGroup: 1000
-          # resources:
-          #   requests:
-          #     cpu: "500m" # Minimum CPU request (500 millicores)
-          #     memory: "512Mi" # Minimum memory request (512 Megabytes)
-          #   limits:
-          #     cpu: "1" # Maximum CPU limit (1 core)
-          #     memory: "1Gi" # Maximum memory limit (1 Gigabyte)
+
+          resources:
+            requests:
+              cpu: "500m" # Minimum CPU request (500 millicores)
+              memory: "512Mi" # Minimum memory request (512 Megabytes)
+            limits:
+              cpu: "1" # Maximum CPU limit (1 core)
+              memory: "1Gi" # Maximum memory limit (1 Gigabyte)
       volumes:
         - name: jenkins-data
           persistentVolumeClaim:
             claimName: jenkins-pvc-claim
-      # Add wait-for-condition
-      strategy:
-        type: Recreate
-        # Wait for the PVC to be ready
-        # This will delay the pod creation until the PVC is bound
-        wait-for-condition:
-          type: Ready
-          status: "True"
-
+      # # Add wait-for-condition
+      # strategy:
+      #   type: Recreate
+      #   # Wait for the PVC to be ready
+      #   # This will delay the pod creation until the PVC is bound
+      #   wait-for-condition:
+      #     type: Ready
+      #     status: "True"
