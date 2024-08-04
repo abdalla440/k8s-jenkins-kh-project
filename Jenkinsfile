@@ -71,53 +71,45 @@
 
 /* groovylint-disable-next-line CompileStatic */
 pipeline {
-// 
-agent any
+  //
+  agent any
+  environment {
+    registry = 'ahannora440/google-dino'
+    registryCredential = 'credentials-dockerhub'
+    dockerImage = ''
+  }
     stages {
-        stage("Clone Git Repository") {
-            steps {
-                git(
+        stage('Clone Git Repository') {
+      steps {
+        git(
                     url: 'https://github.com/abdalla440/k8s-jenkins-kh-project.git',
-                    branch: "main",
+                    branch: 'main',
                     changelog: true,
                     poll: true
                 )
-            }
+      }
         }
-    }
-  // environment {
-  //   registry = 'ahannora440/google-dino'
-  //   registryCredential = 'credentials-dockerhub'
-  //   dockerImage = ''
-  // }
 
-  // agent any
-  // stages {
-  //   stage('Cloning from GitHub') {
-  //     steps {
-  //       git 'https://github.com/abdalla440/k8s-jenkins-kh-project.git'
-  //     }
-  //   }
-  //   stage('Building image') {
-  //     steps {
-  //       script {
-  //         dockerImage = docker.build registry + ":$BUILD_NUMBER"
-  //       }
-  //     }
-  //   }
-  //   stage('Deploy image') {
-  //     steps {
-  //       script {
-  //         docker.withRegistry('', registryCredential) {
-  //           dockerImage.push()
-  //         }
-  //       }
-  //     }
-  //   }
-  //   stage('Cleaning up') {
-  //     steps {
-  //       sh "docker rmi $registry:$BUILD_NUMBER"
-  //     }
-  //   }
-  // }
+        stage('Building image') {
+          steps {
+            script {
+              dockerImage = docker.build registry + ":$BUILD_NUMBER"
+            }
+          }
+        }
+        stage('Deploy image') {
+          steps {
+            script {
+              docker.withRegistry('', registryCredential) {
+                dockerImage.push()
+              }
+            }
+          }
+        }
+        stage('Cleaning up') {
+          steps {
+            sh "docker rmi $registry:$BUILD_NUMBER"
+          }
+        }
+        }
 }
