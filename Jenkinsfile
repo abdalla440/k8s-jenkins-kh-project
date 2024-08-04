@@ -24,16 +24,6 @@ pipeline {
       }
     }
 
-    stage('Deploy App to Kubernetes') {    
-      steps {
-        container('kubectl') {
-          withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-            sh 'sed -i \"s|image:.*|image: ahannora440/google-dino:${BUILD_NUMBER}|g\" app-manifest-files/deployment.yaml'
-            sh 'kubectl apply -f app-manifest-files'
-          }
-        }
-      }
-    }
  
   }
 }
