@@ -71,45 +71,104 @@
 
 /* groovylint-disable-next-line CompileStatic */
 pipeline {
-  //
-  agent any
-  environment {
-    registry = 'ahannora440/google-dino'
-    registryCredential = 'credentials-dockerhub'
-    dockerImage = ''
-  }
+    environment {
+        imagename = "ahannora440/google-dino"
+        dockerImage = ''
+        containerName = 'dino-app'
+        dockerHubCredentials = 'credentials-dockerhub'
+    }
+ 
+    agent any
+ 
     stages {
-        stage('Clone Git Repository') {
-      steps {
-        git(
-                    url: 'https://github.com/abdalla440/k8s-jenkins-kh-project.git',
-                    branch: 'main',
-                    changelog: true,
-                    poll: true
-                )
-      }
+        stage('Cloning Git') {
+            steps {
+                git([url: 'https://github.com/GANESH0369/jenkins.git', branch: 'main'])
+            }
         }
-
+ 
         stage('Building image') {
-          steps {
-            script {
-              dockerImage = docker.build registry + ":$BUILD_NUMBER"
+            steps {
+                script {
+                    dockerImage = docker.build "${imagename}:latest"
+                }
             }
-          }
         }
-        stage('Deploy image') {
-          steps {
-            script {
-              docker.withRegistry('', registryCredential) {
-                dockerImage.push()
-              }
+ 
+        // stage('Running image') {
+        //     steps {
+        //         script {
+        //             sh "docker run -d --name ${containerName} ${imagename}:latest"
+        //             // Perform any additional steps needed while the container is running
+        //         }
+        //     }
+        // }
+ 
+        // stage('Stop and Remove Container') {
+        //     steps {
+        //         script {
+        //             sh "docker stop ${containerName} || true"
+        //             sh "docker rm ${containerName} || true"
+        //         }
+        //     }
+        // }
+ 
+        stage('Deploy Image') {
+            steps {
+                script {
+                    // Use Jenkins credentials for Docker Hub login
+                    withCredentials([usernamePassword(credentialsId: dockerHubCredentials, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
+ 
+                        // Push the image
+                        sh "docker push ${imagename}:latest"
+                    }
+                }
             }
-          }
         }
-        stage('Cleaning up') {
-          steps {
-            sh "docker rmi $registry:$BUILD_NUMBER"
-          }
-        }
-        }
+    }
 }
+
+// pipeline {
+//   //
+//   agent any
+//   environment {
+//     registry = 'ahannora440/google-dino'
+//     registryCredential = 'credentials-dockerhub'
+//     dockerImage = ''
+//   }
+//     stages {
+//         stage('Clone Git Repository') {
+//       steps {
+//         git(
+//                     url: 'https://github.com/abdalla440/k8s-jenkins-kh-project.git',
+//                     branch: 'main',
+//                     changelog: true,
+//                     poll: true
+//                 )
+//       }
+//         }
+
+//         stage('Building image') {
+//           steps {
+//             script {
+//               dockerImage = docker.build registry + ":$BUILD_NUMBER"
+//             }
+//           }
+//         }
+//         stage('Deploy image') {
+//           steps {
+//             script {
+//               docker.withRegistry('', registryCredential) {
+//                 dockerImage.push()
+//               }
+//             }
+//           }
+//         }
+//         stage('Cleaning up') {
+//           steps {
+//             sh "docker rmi $registry:$BUILD_NUMBER"
+//           }
+//         }
+//         }
+// }
