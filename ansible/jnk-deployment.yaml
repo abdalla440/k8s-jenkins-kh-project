@@ -15,7 +15,7 @@ spec:
         app: jenkins
     spec:
 
-      serviceAccountName: ebs-csi-controller-sa
+      serviceAccountName: jenkins-sa
       containers:
         - name: jenkins
           image: jenkins/jenkins:lts-jdk17
