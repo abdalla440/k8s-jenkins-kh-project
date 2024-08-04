@@ -6,6 +6,7 @@ pipeline {
                 git url: 'https://github.com/abdalla440/k8s-jenkins-kh-project.git'
             }
         }
+        
         stage('Build Image') {
             steps {
                 script {
