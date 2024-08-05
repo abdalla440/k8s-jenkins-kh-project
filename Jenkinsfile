@@ -12,7 +12,12 @@ pipeline {
             namespace: jenkins
         spec:
             serviceAccountName: jenkins-sa
-            containers:   
+            containers:
+            - name: deployer
+              image: joshendriks/alpine-k8s
+              command:
+              - /bin/cat
+            tty: true       
             - name: kaniko
               image: gcr.io/kaniko-project/executor:debug
               command:
@@ -29,18 +34,9 @@ pipeline {
     }
 
   }
-  
-  stages {
-    stage('Run kaniko') {
-      steps {
-        container('kaniko') {
-            sh '''
-            echo "Printing Docker Secret:"
-            cat /kaniko/.docker/config.json
-            '''        }
 
-      }
-    }
+  stages {
+
     stage('Kaniko Build & Push Image') {
       steps {
         container('kaniko') {
@@ -51,6 +47,16 @@ pipeline {
           }
         }
       }
+    }
+    
+    stage('Run kaniko') {
+    steps {
+    container('deployer') {
+        sh '''
+        echo "hello from deployer"
+        '''
+        }
+        }
     }
   }
 }
