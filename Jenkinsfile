@@ -41,5 +41,18 @@ pipeline {
 
       }
     }
+    stage('Kaniko Build & Push Image') {
+      steps {
+        container('kaniko') {
+          script {
+            sh '''
+            /kaniko/executor --dockerfile `pwd`/Dockerfile \
+                            --context `pwd` \
+                            --destination=ahannora440:${BUILD_NUMBER}
+            '''
+          }
+        }
+      }
+    }
   }
 }
