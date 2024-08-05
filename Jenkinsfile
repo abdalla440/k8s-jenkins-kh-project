@@ -74,7 +74,7 @@ pipeline {
             
             aws --version
 
-            kubectl apply -f app-manifest-files/deployment.yaml'''
+            kubectl apply -f app-manifest-files'''
           }
         }
       }
