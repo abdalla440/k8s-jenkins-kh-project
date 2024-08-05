@@ -17,7 +17,7 @@ pipeline {
               image: joshendriks/alpine-k8s
               command:
               - /bin/cat
-            tty: true       
+              tty: true       
             - name: kaniko
               image: gcr.io/kaniko-project/executor:debug
               command:
