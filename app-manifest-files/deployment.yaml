@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: dino-app
-  namespace: dino-app 
+  namespace: dino-namespace 
   labels:
     app: dino-app
 spec:
