@@ -3,11 +3,10 @@ pipeline {
   agent {
     kubernetes {
       yaml '''
-        apiVersion: v1
         kind: Pod
         metadata:
             name: kaniko
-            namespace:jenkins
+            namespace: jenkins
         spec:
             serviceAccountName: jenkins-sa
             containers:   
