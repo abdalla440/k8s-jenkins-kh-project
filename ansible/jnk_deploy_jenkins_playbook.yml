@@ -36,3 +36,8 @@
       kubernetes.core.k8s:
         state: present
         definition: "{{ lookup('file', 'jnk-service.yaml') }}"
+
+    - name: Apply kanico secret
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'secret.yaml') }}"
