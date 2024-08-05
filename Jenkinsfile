@@ -10,10 +10,10 @@ pipeline {
             serviceAccountName: jenkins-sa
             containers:   
             - name: kaniko
-                image: gcr.io/kaniko-project/executor:debug
-                command:
-                - cat
-                tty: true
+              image: gcr.io/kaniko-project/executor:debug
+              command:
+              - /busybox/cat
+              tty: true
         
         '''
     }
