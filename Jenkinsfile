@@ -1,29 +1,38 @@
 pipeline {
-    agent any 
-    stages {
-        stage('Checkout Code') {
-            steps {
-                git url: 'https://github.com/abdalla440/k8s-jenkins-kh-project.git'
-            }
-        }
-        
-        stage('Build Image') {
-            steps {
-                script {
-                    // Ensure you have the Docker plugin installed in Jenkins
-                    docker.build image: 'ahannora440/google-dino', tag: 'latest' // Replace 'latest' with a version tag if needed
-                }
-            }
-        }
-        stage('Push Image') {
-            steps {
-                script {
-                    // Ensure you have the Docker plugin installed in Jenkins
-                    docker.withRegistry( 'https://index.docker.io/v1/', credentialsId: 'credentials-dockerhub') {
-                        docker.push image: 'ahannora440/google-dino:latest'
-                    }
-                }
-            }
-        }
+  agent {
+    kubernetes {
+      yaml '''
+        apiVersion: v1
+        kind: Pod
+        spec:
+          containers:
+          - name: maven
+            image: maven:alpine
+            command:
+            - cat
+            tty: true
+          - name: node
+            image: node:16-alpine3.12
+            command:
+            - cat
+            tty: true
+        '''
     }
+  }
+  stages {
+    stage('Run maven') {
+      steps {
+        container('maven') {
+          sh 'mvn -version'
+          sh ' echo Hello World > hello.txt'
+          sh 'ls -last'
+        }
+        container('node') {
+          sh 'npm version'
+          sh 'cat hello.txt'
+          sh 'ls -last'
+        }
+      }
+    }
+  }
 }
