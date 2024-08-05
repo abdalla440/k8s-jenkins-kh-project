@@ -7,6 +7,7 @@ const DinoGame = () => {
     <div>
       <h1> Welcome To My World </h1>
           <h2> Hannora Super Dino Game </h2>
+    
 
       <ChromeDinoGame />
     </div>
