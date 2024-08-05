@@ -32,8 +32,10 @@ pipeline {
     stage('Run kaniko') {
       steps {
         container('kaniko') {
-          sh ' echo Hello World > hello.txt'
-        }
+            sh '''
+            echo "Printing Docker Secret:"
+            cat /kaniko/.docker/config.json
+            '''        }
 
       }
     }
