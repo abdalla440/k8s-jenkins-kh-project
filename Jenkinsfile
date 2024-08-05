@@ -37,26 +37,39 @@ pipeline {
 
   stages {
 
-    stage('Kaniko Build & Push Image') {
+    // stage('Kaniko Build & Push Image') {
+    //   steps {
+    //     container('kaniko') {
+    //       script {
+    //         sh '''
+    //         /kaniko/executor --dockerfile google-dino-game/Dockerfile --context google-dino-game --destination=ahannora440/google-dino
+    //         '''
+    //       }
+    //     }
+    //   }
+    // }
+    
+    stage('Run kaniko') {
+        steps {
+            container('deployer') {
+                sh '''
+                echo "hello from deployer"
+                '''
+                }
+                }
+            }
+
+    
+    stage('Deploy App to Kubernetes') {    
       steps {
-        container('kaniko') {
-          script {
-            sh '''
-            /kaniko/executor --dockerfile google-dino-game/Dockerfile --context google-dino-game --destination=ahannora440/google-dino
-            '''
+        container('kubectl') {
+          withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+            // sh 'sed -i "s/<TAG>/${BUILD_NUMBER}/" web-app.yaml'
+            sh 'kubectl apply -f app-manifest-files/deployment.yaml'
           }
         }
       }
     }
-    
-    stage('Run kaniko') {
-    steps {
-    container('deployer') {
-        sh '''
-        echo "hello from deployer"
-        '''
-        }
-        }
-    }
+ 
   }
 }

@@ -1,0 +1,29 @@
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJVDBnbUxKdDdwWGt3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TkRBNE1EUXdPRE0wTkRaYUZ3MHpOREE0TURJd09ETTVORFphTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUURjN3d6bnB0Y0c0WVRLdUlYeHFDMyszNTFEYmJweWtRUE1rYUpnQ1NVQ2UrNkVyY1VpbkpRMXVpcHcKUHI5UVl6TksyRzh2WGkrRzhxRGJOWTFtRzl5UDBmbTZyMnUxcExUNStqbzI1ZVprckpOcnRWV08zb3BOWHB4Uwo1VkthMS9WL3FxcndoaW5valoxUFUrT0RLSnRiNGxabGdBUDg5U2M2b0dsTG01ZG5nZXZoaVRkTzlOTk1RWjRaCllBMnNpWnlZVjlpVHFEYWswOHBFZk5GV1RWUzBqa1IzazIyd2VtdExYZ3JFSDFWUWJFSnd6RTFzWUx1dVBlWVYKdENxYUk5aFNGT1hjNjVubEIvdFduYytPbDVJdzRCTmJnb2kwdG83ZWZBNVpDQ085R3htYnFrWXFCZGljTW96Swp5ajQzcTRndXlvMW1iaGFMeXBVN3BJQ0NaMkR4QWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJSYVUwNlF3VnR4ZDdOVVlnV3NMZkNwUUJ0OTJqQVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQUd4VXRHWVI2Zgo5KzZIY2lXRU5kWDdLWjFyOGN5QkVtZlJuMStjSUNvaGk3eFpjWnRCSllUMVRFY1FEZC9sZWgxejdEMXZIaFZICnhkVm9wU0RVb2FyT3NIN2NmRkVCV3FCVy9mV3RBamZoNFJORzR4VkpBRk05dUhjZTdqYkUxbzEzZWR2OGZGVnoKOHU5Wk5wTW1nVEpTU0EycERvdWtSSHFaQlcweXFmdWc2T3pXcU1EeDYrSGRLV2RlbTRwUkZSTXZxSFlqd2F2YQpQTHhOZHJhRU5YbXEreWJVUEQvR0Y1VG5vajZ0ampjcTVkbTBhd0VpUWU3bGhBa3g0N2JudTEwQ1ZhVTJSOXEwCmhEc2E4eVYxQWNia1ZkUFMvaFJGMXB4WXkzc1dUcEVJdlZzcDNPbkNPM3hxa2gyVVlOdWh2aHJ0VnlDQ0lLQWIKK2hjQzdrOGJWUm5pCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    server: https://A10DAC2F05AE43E1793AFDC243329D2E.gr7.us-east-1.eks.amazonaws.com
+  name: arn:aws:eks:us-east-1:058264547261:cluster/dino-cluster
+contexts:
+- context:
+    cluster: arn:aws:eks:us-east-1:058264547261:cluster/dino-cluster
+    user: arn:aws:eks:us-east-1:058264547261:cluster/dino-cluster
+  name: arn:aws:eks:us-east-1:058264547261:cluster/dino-cluster
+current-context: arn:aws:eks:us-east-1:058264547261:cluster/dino-cluster
+kind: Config
+preferences: {}
+users:
+- name: arn:aws:eks:us-east-1:058264547261:cluster/dino-cluster
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+      args:
+      - --region
+      - us-east-1
+      - eks
+      - get-token
+      - --cluster-name
+      - dino-cluster
+      - --output
+      - json
+      command: aws
