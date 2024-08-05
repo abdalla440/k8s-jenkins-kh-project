@@ -42,7 +42,7 @@ pipeline {
          container('kaniko') {
            script {
              sh '''
-             /kaniko/executor --dockerfile google-dino-game/Dockerfile --context google-dino-game --destination=ahannora440/google-dino
+             /kaniko/executor --dockerfile google-dino-game/Dockerfile --context google-dino-game --destination=ahannora440/google-dino:${BUILD_NUMBER}
              '''
            }
          }
@@ -69,11 +69,8 @@ pipeline {
       steps {
         container('deployer') {
           withCredentials([file(credentialsId: 'kubeconfigscrt', variable: 'KUBECONFIG')]) {
-            // sh 'sed -i "s/<TAG>/${BUILD_NUMBER}/" web-app.yaml'
+            sh 'sed -i \"s|image:.*|image: ahannora440/google-dino:${BUILD_NUMBER}|g\" app-manifest-files/deployment.yaml'
             sh '''
-            
-            aws --version
-
             kubectl apply -f app-manifest-files'''
           }
         }
