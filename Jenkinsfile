@@ -25,8 +25,6 @@ pipeline {
               - name: docker-config
                 secret:
                   secretName: docker-config
-
-        
         '''
     }
   }
