@@ -19,12 +19,12 @@ pipeline {
               - /busybox/cat
               tty: true
               volumeMounts:
-                - name: docker-config
+                - name: docker-config2
                   mountPath: /kaniko/.docker
             volumes:
-              - name: docker-config
+              - name: docker-config2
                 secret:
-                  secretName: docker-config
+                  secretName: docker-config2
 
         
         '''
