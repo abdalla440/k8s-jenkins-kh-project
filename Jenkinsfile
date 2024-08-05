@@ -1,38 +1,41 @@
 pipeline {
-    
+
   agent {
     kubernetes {
       yaml '''
         apiVersion: v1
         kind: Pod
+        metadata:
+            name: kaniko
+        namespace:jenkins
         spec:
-          containers:
-          - name: maven
-            image: maven:alpine
-            command:
-            - cat
-            tty: true
-          - name: node
-            image: node:16-alpine3.12
-            command:
-            - cat
-            tty: true
+            serviceAccountName: jenkins-sa
+            containers:   
+            - name: kaniko
+                image: gcr.io/kaniko-project/executor:debug
+                command:
+                - /busybox/cat
+                tty: true
+                volumeMounts:
+                - name: kaniko-secret
+                    mountPath: /kaniko/.docker
+            volumes:
+                - name: kaniko-secret
+                secret:
+                    secretName: regcred
+                    items:
+                    - key: .dockerconfigjson
+                        path: config.json
         '''
     }
   }
   stages {
-    stage('Run maven') {
+    stage('Run kaniko') {
       steps {
-        container('maven') {
-          sh 'mvn -version'
+        container('kaniko') {
           sh ' echo Hello World > hello.txt'
-          sh 'ls -last'
         }
-        container('node') {
-          sh 'npm version'
-          sh 'cat hello.txt'
-          sh 'ls -last'
-        }
+
       }
     }
   }
