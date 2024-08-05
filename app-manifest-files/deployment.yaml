@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: dino-app-container
-        image: ahannora440/google-dino:latest
+        image: ahannora440/google-dino
         ports:
         - containerPort: 80
         # resources:
