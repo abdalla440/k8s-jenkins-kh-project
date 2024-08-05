@@ -27,8 +27,9 @@ pipeline {
                   secretName: docker-config
         '''
     }
-    
+
   }
+  
   stages {
     stage('Run kaniko') {
       steps {
