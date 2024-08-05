@@ -69,7 +69,9 @@ pipeline {
         container('deployer') {
           withCredentials([file(credentialsId: 'kubeconfigscrt', variable: 'KUBECONFIG')]) {
             // sh 'sed -i "s/<TAG>/${BUILD_NUMBER}/" web-app.yaml'
-            sh 'kubectl apply -f app-manifest-files/deployment.yaml'
+            sh '
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            kubectl apply -f app-manifest-files/deployment.yaml'
           }
         }
       }
