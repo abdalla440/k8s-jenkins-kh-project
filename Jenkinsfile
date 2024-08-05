@@ -71,7 +71,11 @@ pipeline {
           withCredentials([file(credentialsId: 'kubeconfigscrt', variable: 'KUBECONFIG')]) {
             // sh 'sed -i "s/<TAG>/${BUILD_NUMBER}/" web-app.yaml'
             sh '''
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+            unzip awscli-bundle.zip
+            sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+            aws --version
+
             kubectl apply -f app-manifest-files/deployment.yaml'''
           }
         }
