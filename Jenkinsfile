@@ -18,16 +18,14 @@ pipeline {
               command:
               - /busybox/cat
               tty: true
-            //   volumeMounts:
-            //     - name: kaniko-secret
-            //       mountPath: /kaniko/.docker
-            // volumes:
-            //   - name: kaniko-secret
-            //     secret:
-            //       secretName: regcred
-            //       items:
-            //         - key: .dockerconfigjson
-            //           path: config.json
+              volumeMounts:
+                - name: docker-config
+                  mountPath: /kaniko/.docker
+            volumes:
+              - name: docker-config
+                secret:
+                  secretName: docker-config
+
         
         '''
     }
@@ -46,9 +44,7 @@ pipeline {
         container('kaniko') {
           script {
             sh '''
-            /kaniko/executor --dockerfile google-dino-game/Dockerfile \
-                            --context google-dino-game \
-                            --destination=ahannora440/k8s-jenkins-kh-project:${BUILD_NUMBER}
+            /kaniko/executor --dockerfile google-dino-game/Dockerfile --context google-dino-game --destination=ahannora440/k8s-jenkins-kh-project:${BUILD_NUMBER}
             '''
           }
         }
