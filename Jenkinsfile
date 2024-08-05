@@ -65,14 +65,14 @@ pipeline {
                 AWS_ACCESS_KEY_ID = credentials("aws_access_key_id")
                 AWS_SECRET_ACCESS_KEY = credentials("aws_secret_access_key")
             } 
-             
+
       steps {
         container('deployer') {
           withCredentials([file(credentialsId: 'kubeconfigscrt', variable: 'KUBECONFIG')]) {
             // sh 'sed -i "s/<TAG>/${BUILD_NUMBER}/" web-app.yaml'
-            sh '
+            sh '''
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            kubectl apply -f app-manifest-files/deployment.yaml'
+            kubectl apply -f app-manifest-files/deployment.yaml'''
           }
         }
       }
