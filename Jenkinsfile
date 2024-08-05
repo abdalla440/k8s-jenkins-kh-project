@@ -46,9 +46,9 @@ pipeline {
         container('kaniko') {
           script {
             sh '''
-            /kaniko/executor --dockerfile `pwd`/Dockerfile \
-                            --context `pwd` \
-                            --destination=ahannora440:${BUILD_NUMBER}
+            /kaniko/executor --dockerfile app-manifest-files/Dockerfile \
+                            --context app-manifest-files \
+                            --destination=ahannora440/k8s-jenkins-kh-project:${BUILD_NUMBER}
             '''
           }
         }
