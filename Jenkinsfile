@@ -14,9 +14,9 @@ pipeline {
             serviceAccountName: jenkins-sa
             containers:
             - name: deployer
-              image: joshendriks/alpine-k8s
+              image: abanobmorkos10/aws-kubectl
               command:
-              - /bin/cat
+              - /bin/bash
               tty: true       
             - name: kaniko
               image: gcr.io/kaniko-project/executor:debug
@@ -71,11 +71,11 @@ pipeline {
           withCredentials([file(credentialsId: 'kubeconfigscrt', variable: 'KUBECONFIG')]) {
             // sh 'sed -i "s/<TAG>/${BUILD_NUMBER}/" web-app.yaml'
             sh '''
-            curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-            unzip awscli-bundle.zip
-            apk add --no-cache python3 py3-pip
+            // curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+            // unzip awscli-bundle.zip
+            // apk add --no-cache python3 py3-pip
 
-            ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+            // ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
             aws --version
 
             kubectl apply -f app-manifest-files/deployment.yaml'''
