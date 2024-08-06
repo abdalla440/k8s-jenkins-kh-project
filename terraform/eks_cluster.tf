@@ -14,7 +14,6 @@ resource "aws_eks_cluster" "k8s" {
   }
 }
 
-
 # resource "aws_eks_addon" "aws-ebs-csi-driver" {
 #   cluster_name             = var.cluster_name
 #   addon_name               = "aws-ebs-csi-driver"
