@@ -5,32 +5,7 @@ pipeline {
   }
   agent {
     kubernetes {
-      yaml '''
-        kind: Pod
-        metadata:
-            name: kaniko
-            namespace: jenkins
-        spec:
-            serviceAccountName: jenkins-sa
-            containers:
-            - name: deployer
-              image: abanobmorkos10/aws-kubectl
-              command:
-              - /bin/bash
-              tty: true       
-            - name: kaniko
-              image: gcr.io/kaniko-project/executor:debug
-              command:
-              - /busybox/cat
-              tty: true
-              volumeMounts:
-                - name: docker-config
-                  mountPath: /kaniko/.docker
-            volumes:
-              - name: docker-config
-                secret:
-                  secretName: docker-config
-        '''
+      yamlFile 'kubernetes_agent.yml'
     }
 
   }
@@ -48,17 +23,6 @@ pipeline {
          }
        }
      }
-    
-    stage('Run kaniko') {
-        steps {
-            container('deployer') {
-                sh '''
-                echo "hello from deployer"
-                '''
-                }
-                }
-            }
-
     
     stage('Deploy App to Kubernetes') {  
         environment {
